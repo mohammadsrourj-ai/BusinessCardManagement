@@ -4,10 +4,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessCardManagementAPI", "BusinessCardManagementAPI\BusinessCardManagementAPI.csproj", "{8CAF5D9B-D795-490D-AB9C-E4F39AA46E95}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1A7ADB72-6371-4C1D-A053-723BA947E051} = {1A7ADB72-6371-4C1D-A053-723BA947E051}
+		{8C9A4ED0-087F-4BE1-BF40-2083AA0C3D7A} = {8C9A4ED0-087F-4BE1-BF40-2083AA0C3D7A}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessCardManagement.Core", "BusinessCardManagement.Core\BusinessCardManagement.Core.csproj", "{8C9A4ED0-087F-4BE1-BF40-2083AA0C3D7A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessCardManagement.Application", "BusinessCardManagement.Application\BusinessCardManagement.Application.csproj", "{1A7ADB72-6371-4C1D-A053-723BA947E051}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8C9A4ED0-087F-4BE1-BF40-2083AA0C3D7A} = {8C9A4ED0-087F-4BE1-BF40-2083AA0C3D7A}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
