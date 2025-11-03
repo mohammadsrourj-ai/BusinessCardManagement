@@ -1,5 +1,6 @@
 using BusinessCardManagement.Application.Context;
 using BusinessCardManagement.Application.Repositories;
+using BusinessCardManagement.Application.Services;
 using BusinessCardManagement.Core.Interfeces;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,7 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 
 
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddTransient<IBusinessCardsService, BusinessCardsService>();
 
 var app = builder.Build();
 
