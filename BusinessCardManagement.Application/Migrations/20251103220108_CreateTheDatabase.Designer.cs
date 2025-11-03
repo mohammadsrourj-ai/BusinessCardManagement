@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessCardManagement.Application.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251101220544_CreateTheDatabase")]
+    [Migration("20251103220108_CreateTheDatabase")]
     partial class CreateTheDatabase
     {
         /// <inheritdoc />
@@ -46,9 +46,10 @@ namespace BusinessCardManagement.Application.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("GenderCode")
+                    b.Property<string>("Gender")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(6)
+                        .HasColumnType("nvarchar(6)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -60,44 +61,12 @@ namespace BusinessCardManagement.Application.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<byte[]>("Photo")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("PhotoContentType")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<string>("Photo")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GenderCode");
-
                     b.ToTable("BusinessCards");
-                });
-
-            modelBuilder.Entity("BusinessCardManagement.Core.Models.Gender", b =>
-                {
-                    b.Property<string>("GenderCode")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("GenderName")
-                        .IsRequired()
-                        .HasMaxLength(6)
-                        .HasColumnType("nvarchar(6)");
-
-                    b.HasKey("GenderCode");
-
-                    b.ToTable("Genders");
-                });
-
-            modelBuilder.Entity("BusinessCardManagement.Core.Models.BusinessCard", b =>
-                {
-                    b.HasOne("BusinessCardManagement.Core.Models.Gender", "Gender")
-                        .WithMany()
-                        .HasForeignKey("GenderCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Gender");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,6 +12,4 @@ public class ApplicationDbContext : DbContext
     }
     public DbSet<BusinessCard> BusinessCards { get; set; }
 
-    public DbSet<Gender> Genders { get; set; }
-
 }

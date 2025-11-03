@@ -10,11 +10,8 @@ public class BusinessCard
     [Required, MaxLength(100)]
     public string Name { get; set; } = null!;
 
-    [Required]
-    [ForeignKey("Gender")]
-    public string GenderCode { get; set; } = null!;
-
-    public Gender Gender { get; set; } = null!;
+    [Required, MaxLength(6)]
+    public string Gender { get; set; } = null!;
 
     [Required]
     public DateTime DateOfBirth { get; set; }
@@ -25,10 +22,7 @@ public class BusinessCard
     [Required, Phone, MaxLength(20)]
     public string Phone { get; set; } = null!;
 
-    public byte[]? Photo { get; set; }
-
-    [MaxLength(50)]
-    public string? PhotoContentType { get; set; }
+    public string? Photo { get; set; }
 
     [Required, MaxLength(200)]
     public string Address { get; set; } = null!;
