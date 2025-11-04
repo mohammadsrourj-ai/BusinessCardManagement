@@ -6,4 +6,6 @@ namespace BusinessCardManagement.Application.Services;
 public interface IBusinessCardsService
 {
     Task<ResponseEnvelope<PagedResponse<BusinessCardDTO>>> GetAll(GetAllBusinessCardRequest request, PagedRequest pagedRequest);
+
+    Task<ResponseEnvelope<bool>> Delete(int id);
 }

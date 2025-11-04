@@ -69,4 +69,37 @@ public class BusinessCardsService : IBusinessCardsService
             };
         }
     }
+
+    public async Task<ResponseEnvelope<bool>> Delete(int id)
+    {
+        try
+        {
+            var businessCard = await _unitOfWork.ReadOnlyBusinessCards.GetFirstOrDefault(b => b.Id == id);
+            if (businessCard == null)
+                return new ResponseEnvelope<bool>
+                {
+                    Message = ErrorMessages.BusinessCardNotFound,
+                    IsSuccess = false,
+                    ResponseData = false
+                };
+
+            _unitOfWork.BusinessCards.Remove(businessCard);
+            _unitOfWork.Complete();
+
+            return new ResponseEnvelope<bool>
+            {
+                IsSuccess = true,
+                ResponseData = true
+            };
+        }
+        catch (Exception ex)
+        {
+            return new ResponseEnvelope<bool>
+            {
+                Message = ex.Message,
+                IsSuccess = false,
+                ResponseData = false
+            };
+        }
+    }
 }
