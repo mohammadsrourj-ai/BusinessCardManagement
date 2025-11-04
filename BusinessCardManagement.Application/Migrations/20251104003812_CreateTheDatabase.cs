@@ -29,6 +29,18 @@ namespace BusinessCardManagement.Application.Migrations
                 {
                     table.PrimaryKey("PK_BusinessCards", x => x.Id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BusinessCards_Email",
+                table: "BusinessCards",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BusinessCards_Phone",
+                table: "BusinessCards",
+                column: "Phone",
+                unique: true);
         }
 
         /// <inheritdoc />

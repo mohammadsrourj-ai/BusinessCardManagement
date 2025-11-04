@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessCardManagement.Application.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251103220108_CreateTheDatabase")]
+    [Migration("20251104003812_CreateTheDatabase")]
     partial class CreateTheDatabase
     {
         /// <inheritdoc />
@@ -65,6 +65,12 @@ namespace BusinessCardManagement.Application.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Phone")
+                        .IsUnique();
 
                     b.ToTable("BusinessCards");
                 });

@@ -1,6 +1,5 @@
 ﻿using BusinessCardManagement.Core.Models;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace BusinessCardManagement.Application.Context;
 
@@ -12,4 +11,16 @@ public class ApplicationDbContext : DbContext
     }
     public DbSet<BusinessCard> BusinessCards { get; set; }
 
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+
+        modelBuilder.Entity<BusinessCard>()
+        .HasIndex(b => b.Email)
+        .IsUnique();
+
+        modelBuilder.Entity<BusinessCard>()
+        .HasIndex(b => b.Phone)
+        .IsUnique();
+    }
 }

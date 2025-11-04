@@ -21,11 +21,11 @@ public class BusinessCardsService : IBusinessCardsService
         {
             var businessCardsQuery = _unitOfWork.ReadOnlyBusinessCards.GetAll()
              .Where(b =>
-                 (request.Name == null || b.Name == request.Name) &&
+                 (request.Name == null || b.Name.Contains(request.Name)) &&
                  (request.DateOfBirth == null || b.DateOfBirth.Date == request.DateOfBirth.Value.Date) &&
-                 (request.Gender == null || b.Gender == request.Gender) &&
-                 (request.Email == null || b.Email == request.Email) &&
-                 (request.Phone == null || b.Phone == request.Phone)
+                 (request.Gender == null || b.Gender.Contains(request.Gender)) &&
+                 (request.Email == null || b.Email.Contains(request.Email)) &&
+                 (request.Phone == null || b.Phone.Contains(request.Phone))
              );
 
             var totalCount = await businessCardsQuery.CountAsync();

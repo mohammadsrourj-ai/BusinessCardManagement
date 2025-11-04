@@ -63,6 +63,12 @@ namespace BusinessCardManagement.Application.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Phone")
+                        .IsUnique();
+
                     b.ToTable("BusinessCards");
                 });
 #pragma warning restore 612, 618
