@@ -30,4 +30,28 @@ public static class FileParser
         var serializer = new XmlSerializer(typeof(List<T>));
         return (List<T>)serializer.Deserialize(stream)!;
     }
+
+    public static byte[] ToCsv<T>(List<T> data)
+    {
+        using var memoryStream = new MemoryStream();
+        using var writer = new StreamWriter(memoryStream);
+        var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+        {
+            HasHeaderRecord = true
+        };
+        using var csv = new CsvWriter(writer, config);
+        csv.WriteRecords(data);
+        writer.Flush();
+        memoryStream.Position = 0;
+        return memoryStream.ToArray();
+    }
+
+    public static byte[] ToXml<T>(List<T> data)
+    {
+        var serializer = new XmlSerializer(typeof(List<T>));
+        using var memoryStream = new MemoryStream();
+        serializer.Serialize(memoryStream, data);
+        memoryStream.Position = 0;
+        return memoryStream.ToArray();
+    }
 }

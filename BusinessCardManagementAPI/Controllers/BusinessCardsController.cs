@@ -20,7 +20,7 @@ public class BusinessCardsController : ControllerBase
     }
 
     [HttpGet("All")]
-    public async Task<IActionResult> GetAllConnections([FromQuery] GetAllBusinessCardRequest request, [FromQuery] PagedRequest pagedRequest)
+    public async Task<IActionResult> GetAll([FromQuery] GetAllBusinessCardRequest request, [FromQuery] PagedRequest pagedRequest)
     {
         var result = await _businessCardsService.GetAll(request, pagedRequest);
 
@@ -29,6 +29,40 @@ public class BusinessCardsController : ControllerBase
 
         return Ok(result);
     }
+
+
+    [HttpGet("Export")]
+    public async Task<IActionResult> Export([FromQuery] FileType fileType, [FromQuery] GetAllBusinessCardRequest request, [FromQuery] PagedRequest pagedRequest)
+    {
+        var result = await _businessCardsService.GetAll(request, pagedRequest);
+
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+
+        if (result.ResponseData!.Items.Count == 0)
+            return Ok(null);
+
+        byte[] fileBytes;
+        string contentType;
+        string fileName;
+
+        if (fileType == FileType.Csv)
+        {
+            fileBytes = FileParser.ToCsv(result.ResponseData!.Items);
+            contentType = "text/csv";
+            fileName = "businesscards.csv";
+        }
+        else
+        {
+            fileBytes = FileParser.ToXml(result.ResponseData!.Items);
+            contentType = "application/xml";
+            fileName = "businesscards.xml";
+        }
+
+        return File(fileBytes, contentType, fileName);
+
+    }
+
 
     [HttpPost()]
     public async Task<IActionResult> Create([FromQuery] CreateBusinessCardRequest requestCard)
