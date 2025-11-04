@@ -34,34 +34,41 @@ public class BusinessCardsController : ControllerBase
     [HttpGet("Export")]
     public async Task<IActionResult> Export([FromQuery] FileType fileType, [FromQuery] GetAllBusinessCardRequest request, [FromQuery] PagedRequest pagedRequest)
     {
-        var result = await _businessCardsService.GetAll(request, pagedRequest);
-
-        if (!result.IsSuccess)
-            return BadRequest(result.Message);
-
-        if (result.ResponseData!.Items.Count == 0)
-            return Ok(null);
-
-        byte[] fileBytes;
-        string contentType;
-        string fileName;
-
-        if (fileType == FileType.Csv)
+        try
         {
-            fileBytes = FileParser.ToCsv(result.ResponseData!.Items);
-            contentType = "text/csv";
-            fileName = "businesscards.csv";
+            var result = await _businessCardsService.GetAll(request, pagedRequest);
+
+            if (!result.IsSuccess)
+                return BadRequest(result.Message);
+
+            if (result.ResponseData!.Items.Count == 0)
+                return Ok(null);
+
+            byte[] fileBytes;
+            string contentType;
+            string fileName;
+
+            if (fileType == FileType.Csv)
+            {
+                fileBytes = FileParser.ToCsv(result.ResponseData!.Items);
+                contentType = "text/csv";
+                fileName = "businesscards.csv";
+            }
+            else
+            {
+                fileBytes = FileParser.ToXml(result.ResponseData!.Items);
+                contentType = "application/xml";
+                fileName = "businesscards.xml";
+            }
+
+            return File(fileBytes, contentType, fileName);
         }
-        else
+        catch (Exception ex)
         {
-            fileBytes = FileParser.ToXml(result.ResponseData!.Items);
-            contentType = "application/xml";
-            fileName = "businesscards.xml";
+            return StatusCode(500, $"Internal server error: {ex.Message}");
         }
-
-        return File(fileBytes, contentType, fileName);
-
     }
+
 
 
     [HttpPost()]
