@@ -19,8 +19,4 @@
     <ProjectReference Include="..\BusinessCardManagement.Core\BusinessCardManagement.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\DTOs\" />
-  </ItemGroup>
-
 </Project>

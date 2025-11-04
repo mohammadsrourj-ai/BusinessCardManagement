@@ -1,4 +1,7 @@
 ﻿using BusinessCardManagement.Application.Services;
+using BusinessCardManagement.Application.Services.DTOs;
+using BusinessCardManagement.Core.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BusinessCardManagementAPI.Controllers;
@@ -12,5 +15,16 @@ public class BusinessCardsController : ControllerBase
     public BusinessCardsController(IBusinessCardsService businessCardsService)
     {
         _businessCardsService = businessCardsService;
+    }
+
+    [HttpGet("All")]
+    public async Task<IActionResult> GetAllConnections([FromQuery] GetAllBusinessCardRequest request, [FromQuery] PagedRequest pagedRequest)
+    {
+        var result = await _businessCardsService.GetAll(request, pagedRequest);
+
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+
+        return Ok(result);
     }
 }
