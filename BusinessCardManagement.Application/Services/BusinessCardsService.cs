@@ -1,6 +1,7 @@
 ﻿using BusinessCardManagement.Application.Services.DTOs;
 using BusinessCardManagement.Core.Helpers;
 using BusinessCardManagement.Core.Interfeces;
+using BusinessCardManagement.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessCardManagement.Application.Services;
@@ -101,5 +102,81 @@ public class BusinessCardsService : IBusinessCardsService
                 ResponseData = false
             };
         }
+    }
+
+    public async Task<ResponseEnvelope<bool>> AddRange(List<BusinessCard> businessCards)
+    {
+        var duplicateEmailsInList = businessCards
+            .GroupBy(c => c.Email)
+            .Where(g => g.Count() > 1)
+            .SelectMany(g => g)
+            .ToList();
+
+        if (duplicateEmailsInList.Any())
+        {
+            return new ResponseEnvelope<bool>
+            {
+                IsSuccess = false,
+                ResponseData = false,
+                Message = ErrorMessages.DuplicateEmailsInRequest,
+            };
+        }
+
+        var duplicatePhonesInList = businessCards
+            .GroupBy(c => c.Phone)
+            .Where(g => g.Count() > 1)
+            .SelectMany(g => g)
+            .ToList();
+
+        if (duplicatePhonesInList.Any())
+        {
+            return new ResponseEnvelope<bool>
+            {
+                IsSuccess = false,
+                ResponseData = false,
+                Message = ErrorMessages.DuplicatePhonesInRequest,
+            };
+        }
+
+        var emails = businessCards.Select(c => c.Email).ToList();
+        var phones = businessCards.Select(c => c.Phone).ToList();
+
+        var existingEmails = await _unitOfWork.ReadOnlyBusinessCards.GetAll()
+            .Where(b => emails.Contains(b.Email))
+            .Select(b => b.Email)
+            .ToListAsync();
+
+        if (existingEmails.Count != 0)
+            return new ResponseEnvelope<bool>
+            {
+                Message = $"{ErrorMessages.ThisEmailIsUsedBefore} - [{string.Join(", ", existingEmails)}]",
+                IsSuccess = false,
+                ResponseData = false
+            };
+
+        var existingPhones = await _unitOfWork.ReadOnlyBusinessCards.GetAll()
+            .Where(b => phones.Contains(b.Phone))
+            .Select(b => b.Phone)
+            .ToListAsync();
+
+        if (existingPhones.Count != 0)
+            return new ResponseEnvelope<bool>
+            {
+                Message = $"{ErrorMessages.ThisPhoneIsUsedBefore} - [ {string.Join(", ", existingPhones)} ]",
+                IsSuccess = false,
+                ResponseData = false
+            };
+
+        await _unitOfWork.BusinessCards.AddRange(businessCards);
+        _unitOfWork.Complete();
+
+        return new ResponseEnvelope<bool>
+        {
+            IsSuccess = true,
+            ResponseData = true,
+        };
+
+
+
     }
 }

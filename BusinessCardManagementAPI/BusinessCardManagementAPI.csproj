@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BusinessCardManagement.Application\BusinessCardManagement.Application.csproj" />
+    <ProjectReference Include="..\BusinessCardManagement.infrastructure\BusinessCardManagement.infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

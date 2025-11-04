@@ -37,4 +37,9 @@ public class ReadOnlyRepository<T> : IReadOnlyRepository<T> where T : class
 
         return query;
     }
+
+    public async Task<bool> Any(Expression<Func<T, bool>> predicate)
+    {
+        return await _context.Set<T>().AsNoTracking().AnyAsync(predicate);
+    }
 }

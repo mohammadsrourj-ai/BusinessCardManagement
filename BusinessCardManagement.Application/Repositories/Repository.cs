@@ -12,10 +12,10 @@ public class Repository<T> : IRepository<T> where T : class
         _context = context;
     }
 
-    public async Task<T> Add(T entity)
+    public async Task<List<T>> AddRange(List<T> entities)
     {
-        await _context.Set<T>().AddAsync(entity);
-        return entity;
+        await _context.Set<T>().AddRangeAsync(entities);
+        return entities;
     }
 
     public T Remove(T entity)

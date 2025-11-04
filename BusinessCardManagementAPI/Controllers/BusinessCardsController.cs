@@ -1,6 +1,8 @@
 ﻿using BusinessCardManagement.Application.Services;
 using BusinessCardManagement.Application.Services.DTOs;
 using BusinessCardManagement.Core.Helpers;
+using BusinessCardManagement.Core.Models;
+using BusinessCardManagement.infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +23,75 @@ public class BusinessCardsController : ControllerBase
     public async Task<IActionResult> GetAllConnections([FromQuery] GetAllBusinessCardRequest request, [FromQuery] PagedRequest pagedRequest)
     {
         var result = await _businessCardsService.GetAll(request, pagedRequest);
+
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+
+        return Ok(result);
+    }
+
+    [HttpPost()]
+    public async Task<IActionResult> Create([FromQuery] CreateBusinessCardRequest requestCard)
+    {
+        List<BusinessCard> businessCards = new List<BusinessCard>();
+
+        businessCards.Add(new BusinessCard
+        {
+            Name = requestCard.Name,
+            DateOfBirth = requestCard.DateOfBirth,
+            Email = requestCard.Email,
+            Gender = requestCard.Gender,
+            Phone = requestCard.Phone,
+            Photo = requestCard.Photo,
+            Address = requestCard.Address,
+        });
+
+
+        var result = await _businessCardsService.AddRange(businessCards);
+
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+
+        return Ok(result);
+    }
+
+    [HttpPost("Import")]
+    public async Task<IActionResult> CreateFromFile(IFormFile file)
+    {
+        List<BusinessCard> businessCards = new List<BusinessCard>();
+
+        var extension = Path.GetExtension(file.FileName).ToLower();
+        if (extension == ".csv")
+        {
+            var records = FileParser.ParseCsv<CreateBusinessCardRequest>(file);
+            businessCards.AddRange(records.Select(r => new BusinessCard
+            {
+                Name = r.Name,
+                Gender = r.Gender,
+                DateOfBirth = r.DateOfBirth,
+                Email = r.Email,
+                Phone = r.Phone,
+                Photo = r.Photo,
+                Address = r.Address
+            }));
+        }
+        else if (extension == ".xml")
+        {
+            var records = FileParser.ParseXml<CreateBusinessCardRequest>(file);
+            businessCards.AddRange(records.Select(r => new BusinessCard
+            {
+                Name = r.Name,
+                Gender = r.Gender,
+                DateOfBirth = r.DateOfBirth,
+                Email = r.Email,
+                Phone = r.Phone,
+                Photo = r.Photo,
+                Address = r.Address
+            }));
+        }
+        else return BadRequest(ErrorMessages.UnsupportedFileType);
+
+        var result = await _businessCardsService.AddRange(businessCards);
 
         if (!result.IsSuccess)
             return BadRequest(result.Message);

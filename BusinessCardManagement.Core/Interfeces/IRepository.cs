@@ -2,6 +2,6 @@
 
 public interface IRepository<T> where T : class
 {
-    Task<T> Add(T entity);
+    Task<List<T>> AddRange(List<T> entities);
     T Remove(T entity);
 }
