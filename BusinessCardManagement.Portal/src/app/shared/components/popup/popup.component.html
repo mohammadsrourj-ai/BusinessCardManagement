@@ -1,0 +1,23 @@
+@if(popupVisible) {
+<div class="position-fixed fixed-top h-100 w-100 bg-dark d-flex justify-content-center align-items-center bg-opacity-25">
+  <div class="bg-white rounded rounded-4 overflow-auto"
+       [style.height]="popupHeight"
+       [style.width]="popupWidth"
+       [class.p-3]="!hasNoPadding"
+       [@popupAnimation]="'visible'">
+    @if(showTitle) {
+    <div class="d-flex align-items-center justify-content-between"
+         [ngClass]="{ 'px-3 pt-3': hasNoPadding }">
+      <div class="fs-5 fw-bold">{{ title }}</div>
+      @if(showCloseButton) {
+      <button (click)="onCloseButtonClick()" class="btn bg-body">
+        <i class="fa-solid fs-5 fa-xmark"></i>
+      </button>
+      }
+    </div>
+    <hr />
+    }
+    <ng-content></ng-content>
+  </div>
+</div>
+}

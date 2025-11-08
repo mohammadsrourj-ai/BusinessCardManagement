@@ -1,0 +1,41 @@
+<div class="d-flex justify-content-between align-items-center">
+  <div>
+    <div class="col-lg-4 d-flex align-items-center">
+      <app-dropdown class="w-100" [showLabel]="true" [label]="'Total'" [items]="pageSizes" [selectedItem]="selectedItemInTotalDropdown"
+                    [labelLocationInRow]="true" (OnSelectItemEvent)="onPageSizeChange($event)"></app-dropdown>
+    </div>
+  </div>
+  <div class="d-flex align-items-center">
+
+    <!-- Previous -->
+    <button class="border-0 bg-transparent" (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
+
+    <!-- Pages -->
+    @for (page of pagesToShow; track page){
+    @if(page !== '...'){
+    <button class="mx-1 small fw-bold border-0" style="width: 30px; height: 30px;"
+            (click)="changePage(toNumber(page))" [ngClass]="{
+    'bg-primary text-white rounded rounded-circle active': page === currentPage,
+    'bg-transparent': page !== currentPage
+  }">
+      {{ page }}
+    </button>
+
+    }
+    @else{
+    <span class="fs-4 small fw-bold mx-1 pb-3">...</span>
+    }
+    }
+
+
+    <!-- Next -->
+    <button class="border-0 bg-transparent" (click)="changePage(currentPage + 1)"
+            [disabled]="currentPage === totalPages">
+      <i class="fa-solid fa-arrow-right"></i>
+    </button>
+  </div>
+
+
+</div>

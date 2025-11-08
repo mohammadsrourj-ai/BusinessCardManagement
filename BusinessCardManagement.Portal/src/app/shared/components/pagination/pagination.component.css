@@ -1,0 +1,4 @@
+button:hover:not(.active) {
+  background: #f3f3f3 !important;
+  border-radius: 50% !important;
+}

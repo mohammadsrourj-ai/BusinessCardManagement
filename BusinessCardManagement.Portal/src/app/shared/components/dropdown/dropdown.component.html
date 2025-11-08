@@ -1,0 +1,32 @@
+<div [ngClass]="{ 'd-flex align-items-center justify-items-center': labelLocationInRow}">
+  @if(showLabel){
+<label class="fw-bold small" [class.mb-2]="!labelLocationInRow" [class.me-1]="labelLocationInRow">{{label}}</label>
+  }
+<div class="dropdown">
+  <button class="btn bg-gray rounded-0 d-flex align-items-center justify-content-between w-100"
+          style="height: 35px;"
+          [ngClass]="{ 'border border-1 border-danger': showRequiredBoarder}"
+          type="button"
+          id="DropdownMenuButton"
+          data-bs-toggle="dropdown"
+          aria-expanded="false">
+    <span class="d-flex align-items-center">
+      @if(selectedItem.Text){
+      {{selectedItem.Text}}
+      }
+    </span>
+    <i class="fa-solid fa-caret-down ms-2"></i>
+  </button>
+
+
+  <ul class="dropdown-menu overflow-y-scroll w-100" style="max-height: 150px;" aria-labelledby="DropdownMenuButton">
+    @for (item of items; track item.Value){
+    <li>
+      <button class="dropdown-item btn btn-outline-primary d-flex align-items-center" (click)="onSelectItem(item)">
+        {{item.Text}}
+      </button>
+    </li>
+    }
+  </ul>
+</div>
+</div>
