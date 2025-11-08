@@ -18,6 +18,26 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessCardManagement.Appl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessCardManagement.infrastructure", "BusinessCardManagement.infrastructure\BusinessCardManagement.infrastructure.csproj", "{4DBE1259-FC59-4797-BD04-B74F4ACA78F5}"
 EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "BusinessCardManagement.Portal", "BusinessCardManagement.Portal\", "{9EEB22F9-1BDB-70B0-F679-A7591C5B6054}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_50530"
+		Debug.AspNetCompiler.PhysicalPath = "BusinessCardManagement.Portal\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_50530\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_50530"
+		Release.AspNetCompiler.PhysicalPath = "BusinessCardManagement.Portal\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_50530\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "50530"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +60,10 @@ Global
 		{4DBE1259-FC59-4797-BD04-B74F4ACA78F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DBE1259-FC59-4797-BD04-B74F4ACA78F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DBE1259-FC59-4797-BD04-B74F4ACA78F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EEB22F9-1BDB-70B0-F679-A7591C5B6054}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EEB22F9-1BDB-70B0-F679-A7591C5B6054}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EEB22F9-1BDB-70B0-F679-A7591C5B6054}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EEB22F9-1BDB-70B0-F679-A7591C5B6054}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
