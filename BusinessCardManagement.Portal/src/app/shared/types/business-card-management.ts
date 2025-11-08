@@ -15,6 +15,18 @@ export type BusinessCardForm = {
   Photo: string | null;
   Address: string;
 };
+
+export type BusinessCard = {
+  id: number,
+  name: string,
+  gender: string,
+  dateOfBirth: Date,
+  email: string;
+  phone: string;
+  photo: string | null;
+  address: string;
+};
+
 export enum FileType {
   Csv = 'Csv',
   Xml = 'Xml'

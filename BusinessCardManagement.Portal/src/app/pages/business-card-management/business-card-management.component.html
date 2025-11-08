@@ -1,2 +1,98 @@
-<app-pagination [totalItems]="100" (pageChanged)="onOageChange($event)"></app-pagination>
+<style>
+  .card:hover .overlay {
+    opacity: 1 !important;
+    backdrop-filter: blur(5px);
+  }
+
+  .transition {
+    transition: all 0.3s ease;
+  }
+
+</style>
+<div class="container py-3">
+  <div class="d-flex justify-content-between mb-3">
+    <div class="h1 text-primary">
+      Business Card Management
+    </div>
+      <div class="btn-group" role="group">
+        <button id="btnExportGroup" type="button" class="btn btn-outline-primary dropdown-toggle fw-semibold border-2 small px-3"
+                data-bs-toggle="dropdown" aria-expanded="false">
+          Export
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="btnExportGroup">
+          <li><button (click)="exportPageCSV()" class="dropdown-item btn btn-primary">Export Page CSV</button></li>
+          <li><button (click)="exportAllCSV()" class="dropdown-item btn btn-primary">Export All CSV</button></li>
+          <li><button (click)="exportPageXML()" class="dropdown-item btn btn-primary">Export Page XML</button></li>
+          <li><button (click)="exportAllXML()" class="dropdown-item btn btn-primary">Export All XML</button></li>
+        </ul>
+      </div>
+
+  </div>
+
+  <div style="height: 1px !important;" class="bg-primary w-100"></div>
+  <div class="row">
+    @for(card of businessCards; track card.id){
+    <div class="col-12 col-lg-3 col-md-4 my-2">
+      <div class="card shadow-sm border-0 rounded-4 text-center position-relative overflow-hidden"
+           style="max-width: 320px; margin: auto; cursor: pointer;">
+
+        <!-- محتوى الكارد -->
+        <div class="card-content position-relative z-1 p-4">
+          <div class="d-flex justify-content-center mb-3 mt-2">
+            @if(card.photo){
+            <img [src]="card.photo" class="rounded-circle" width="80" height="80" alt="photo">
+            }
+            @else{
+            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+                 style="width: 80px; height: 80px; font-size: 36px;">
+              {{card.name[0]}}
+            </div>
+            }
+          </div>
+
+          <h5 class="fw-semibold mb-3">{{card.name}}</h5>
+
+          <ul class="list-unstyled text-start small text-secondary mb-3">
+            <li class="mb-2 d-flex align-items-center">
+              <i class="fa-solid fa-mars text-primary me-2"></i> {{card.gender}}
+            </li>
+            <li class="mb-2 d-flex align-items-center">
+              <i class="fa-solid fa-cake-candles text-primary me-2"></i> {{card.dateOfBirth | date:'dd/MM/yyyy'}}
+            </li>
+            <li class="mb-2 d-flex align-items-center">
+              <i class="fa-solid fa-envelope text-primary me-2"></i> {{card.email}}
+            </li>
+            <li class="mb-2 d-flex align-items-center">
+              <i class="fa-solid fa-phone text-primary me-2"></i> {{card.phone}}
+            </li>
+            <li class="d-flex align-items-center">
+              <i class="fa-solid fa-location-dot text-primary me-2"></i> {{card.address}}
+            </li>
+          </ul>
+        </div>
+
+        <!-- طبقة overlay -->
+        <div class="overlay position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center
+                bg-dark bg-opacity-50 opacity-0 transition z-2">
+          <button class="btn btn-danger px-4 py-2 rounded-pill shadow">
+            <i class="fa-solid fa-trash me-2"></i> Delete
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+
+    }
+  </div>
+
+  <div style="height: 1px !important;" class="bg-primary w-100"></div>
+  <app-pagination [totalItems]="totalItems" (pageChanged)="onPageChange($event)"></app-pagination>
+</div>
+
 <app-loading [isLoading]="isLoading"></app-loading>
+
+
+
+
+

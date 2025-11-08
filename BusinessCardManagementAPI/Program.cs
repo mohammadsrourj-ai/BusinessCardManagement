@@ -1,4 +1,4 @@
-using BusinessCardManagement.Application.Context;
+﻿using BusinessCardManagement.Application.Context;
 using BusinessCardManagement.Application.Repositories;
 using BusinessCardManagement.Application.Services;
 using BusinessCardManagement.Core.Interfeces;
@@ -21,6 +21,18 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient<IBusinessCardsService, BusinessCardsService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy
+            .SetIsOriginAllowed(_ => true) // يسمح لأي origin
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials(); // إذا بدك تبعت كوكيز/توكن
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -29,6 +41,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 
