@@ -105,4 +105,19 @@ export class PaginationComponent {
     }
     this.pageChanged.emit(this.pagedRequest);
   }
+
+  reset() {
+    this.currentPage = 1;
+    this.pagedRequest = {
+      PageNumber: 1,
+      PageSize: 10
+    }
+    this.selectedItemInTotalDropdown = {
+      Text: "10",
+      Value: 10
+    }
+
+    this.itemsPerPage = 10;
+    this.currentPage = 1;
+  }
 }

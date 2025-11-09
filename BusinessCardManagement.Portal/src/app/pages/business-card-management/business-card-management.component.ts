@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { PaginationComponent } from '../../shared/components/pagination/pagination.component';
 import { PagedRequest } from '../../shared/types/common';
 import { LoadingComponent } from '../../shared/components/loading/loading.component';
@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class BusinessCardManagementComponent implements OnInit {
 
+  @ViewChild('pager') pager!: PaginationComponent;
 
   isLoading: boolean = false;
   pagedRequest: PagedRequest = {
@@ -167,6 +168,15 @@ export class BusinessCardManagementComponent implements OnInit {
     this.getBusinessCards();
   }
 
+  search() {
+    this.pagedRequest = {
+      PageNumber: 1,
+      PageSize: 10
+    }
+    this.pager.reset();
+    this.getBusinessCards();
+  }
+
   resetFilters() {
     this.businessCardRequest = {
       Name: null,
@@ -175,6 +185,11 @@ export class BusinessCardManagementComponent implements OnInit {
       Email: null,
       Phone: null
     };
+    this.pagedRequest = {
+      PageNumber: 1,
+      PageSize: 10
+    }
+    this.pager.reset();
     this.getBusinessCards();
   }
 }

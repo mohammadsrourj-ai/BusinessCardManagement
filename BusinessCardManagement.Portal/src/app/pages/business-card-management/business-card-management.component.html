@@ -30,7 +30,6 @@
 
   </div>
   <div style="height: 1px !important;" class="bg-primary w-100"></div>
-  <!-- 🎯 فلاتر البحث -->
   <div class="card shadow-sm border-0 rounded-4 p-3 mb-4">
     <div class="row g-3 align-items-end">
 
@@ -66,7 +65,7 @@
     </div>
 
     <div class="d-flex justify-content-end mt-3">
-      <button class="btn btn-primary me-2 px-4" (click)="getBusinessCards()">
+      <button class="btn btn-primary me-2 px-4" (click)="search()">
         <i class="fa-solid fa-magnifying-glass me-2"></i> Search
       </button>
       <button class="btn btn-outline-secondary px-4" (click)="resetFilters()">
@@ -81,7 +80,6 @@
       <div class="card shadow-sm border-0 rounded-4 text-center position-relative overflow-hidden"
            style="max-width: 320px; margin: auto; cursor: pointer;">
 
-        <!-- محتوى الكارد -->
         <div class="card-content position-relative z-1 p-4">
           <div class="d-flex justify-content-center mb-3 mt-2">
             @if(card.photo){
@@ -116,7 +114,6 @@
           </ul>
         </div>
 
-        <!-- طبقة overlay -->
         <div class="overlay position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center
                 bg-dark bg-opacity-50 opacity-0 transition z-2">
           <button class="btn btn-danger px-4 py-2 rounded-pill shadow">
@@ -132,7 +129,7 @@
   </div>
 
   <div style="height: 1px !important;" class="bg-primary w-100"></div>
-  <app-pagination [totalItems]="totalItems" (pageChanged)="onPageChange($event)"></app-pagination>
+  <app-pagination #pager [totalItems]="totalItems" (pageChanged)="onPageChange($event)"></app-pagination>
 </div>
 
 <app-loading [isLoading]="isLoading"></app-loading>
