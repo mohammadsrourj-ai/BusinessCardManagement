@@ -7,3 +7,7 @@ export type PagedRequest = {
   PageSize: number;
   PageNumber: number;
 };
+export enum ToastType {
+  Success,
+  Eroor
+};

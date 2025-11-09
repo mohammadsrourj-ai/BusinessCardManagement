@@ -68,7 +68,7 @@
       <button class="btn btn-primary me-2 px-4" (click)="search()">
         <i class="fa-solid fa-magnifying-glass me-2"></i> Search
       </button>
-      <button class="btn btn-outline-secondary px-4" (click)="resetFilters()">
+      <button class="btn btn-outline-rose px-4" (click)="resetFilters()">
         <i class="fa-solid fa-rotate-right me-2"></i> Reset
       </button>
     </div>
@@ -116,7 +116,7 @@
 
         <div class="overlay position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center
                 bg-dark bg-opacity-50 opacity-0 transition z-2">
-          <button class="btn btn-danger px-4 py-2 rounded-pill shadow">
+          <button (click)="showDeleteConfermationPopup(card.id)" class="btn btn-danger px-4 py-2 rounded-pill shadow">
             <i class="fa-solid fa-trash me-2"></i> Delete
           </button>
         </div>
@@ -131,6 +131,20 @@
   <div style="height: 1px !important;" class="bg-primary w-100"></div>
   <app-pagination #pager [totalItems]="totalItems" (pageChanged)="onPageChange($event)"></app-pagination>
 </div>
+
+<app-popup [popupVisible]="deleteConfermationPopupVisible" [showTitle]="true" [title]="'Confirm Delete Business Card.'"
+           [popupHeight]="'auto'" [popupWidth]="'auto'">
+  <p class="fw-bold small"> Are you sure to delete business card number {{businessCardIdToDelete}} ?</p>
+  <div class="d-flex justify-content-end">
+    <button (click)="closeDeleteConfermationPopup()" class="btn btn-sm btn-outline-rose px-4 py-2 me-2">
+      Cancle
+    </button>
+    <button (click)="deleteBusinessCard()" class="btn btn-sm btn-outline-primary px-4 py-2">
+       Confirm
+    </button>
+  </div>
+</app-popup>
+
 
 <app-loading [isLoading]="isLoading"></app-loading>
 

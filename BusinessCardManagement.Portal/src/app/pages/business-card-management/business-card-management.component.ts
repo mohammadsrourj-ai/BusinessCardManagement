@@ -1,16 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PaginationComponent } from '../../shared/components/pagination/pagination.component';
-import { PagedRequest } from '../../shared/types/common';
+import { PagedRequest, ToastType } from '../../shared/types/common';
 import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { BusinessCardManagementService } from '../../shared/services/business-card-management.service';
 import { BusinessCard, FileType, GetAllBusinessCardRequest } from '../../shared/types/business-card-management';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ToastService } from '../../shared/services/toast.service';
+import { PopupComponent } from '../../shared/components/popup/popup.component';
 
 @Component({
   selector: 'app-business-card-management',
   standalone: true,
-  imports: [PaginationComponent, LoadingComponent, CommonModule,FormsModule],
+  imports: [PaginationComponent, LoadingComponent, CommonModule,FormsModule,PopupComponent],
   templateUrl: './business-card-management.component.html'
 })
 export class BusinessCardManagementComponent implements OnInit {
@@ -47,8 +49,12 @@ export class BusinessCardManagementComponent implements OnInit {
     PageSize: 10
   };
 
+  businessCardIdToDelete:number = 0;
+
   totalItems: number = 0;
-  constructor(private businessCardManagement: BusinessCardManagementService) { }
+  deleteConfermationPopupVisible: boolean = false;
+
+  constructor(private businessCardManagement: BusinessCardManagementService, private toastService: ToastService) { }
 
   ngOnInit(): void {
     this.getBusinessCards();
@@ -65,26 +71,41 @@ export class BusinessCardManagementComponent implements OnInit {
       },
       error: (err) => {
         this.isLoading = false;
-        console.error('Something went wrong', err);
+        this.toastService.show('Something went wrong', ToastType.Eroor)
+        console.error(err.error);
       }
     });
   }
 
-  deleteBusinessCards(businessCardId:number) {
-
+  deleteBusinessCard() {
     this.isLoading = true;
-    this.businessCardManagement.DeleteBusinessCard(businessCardId).subscribe({
-      next: (response: any) => {
-        this.businessCards = response.responseData.items;
-        this.totalItems = response.responseData.totalCount;
+    this.businessCardManagement.DeleteBusinessCard(this.businessCardIdToDelete).subscribe({
+      next: (response: any) =>
+      {
+        this.toastService.show("Business card deleted successfully", ToastType.Success)
+        this.closeDeleteConfermationPopup();
         this.isLoading = false;
+        this.resetFilters();
       },
       error: (err) => {
         this.isLoading = false;
-        console.error('Something went wrong', err);
+        this.toastService.show(err.error, ToastType.Eroor)
+        this.closeDeleteConfermationPopup();
       }
     });
   }
+
+
+  showDeleteConfermationPopup(businessCardId: number) {
+    this.businessCardIdToDelete = businessCardId;
+    this.deleteConfermationPopupVisible = true;
+  }
+
+  closeDeleteConfermationPopup() {
+    this.businessCardIdToDelete = 0;
+    this.deleteConfermationPopupVisible = false;
+  }
+
 
   exportBusinessCards() {
     this.isLoading = true;
@@ -104,7 +125,8 @@ export class BusinessCardManagementComponent implements OnInit {
         },
         error: (err) => {
           this.isLoading = false;
-          console.error('Something went wrong', err);
+          this.toastService.show('Something went wrong', ToastType.Eroor)
+          console.error(err.error);
         }
       });
   }
