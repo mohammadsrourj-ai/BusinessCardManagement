@@ -5,11 +5,12 @@ import { LoadingComponent } from '../../shared/components/loading/loading.compon
 import { BusinessCardManagementService } from '../../shared/services/business-card-management.service';
 import { BusinessCard, FileType, GetAllBusinessCardRequest } from '../../shared/types/business-card-management';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-business-card-management',
   standalone: true,
-  imports: [PaginationComponent, LoadingComponent, CommonModule],
+  imports: [PaginationComponent, LoadingComponent, CommonModule,FormsModule],
   templateUrl: './business-card-management.component.html'
 })
 export class BusinessCardManagementComponent implements OnInit {
@@ -56,6 +57,22 @@ export class BusinessCardManagementComponent implements OnInit {
 
     this.isLoading = true;
     this.businessCardManagement.getBusinessCards(this.businessCardRequest, this.pagedRequest).subscribe({
+      next: (response: any) => {
+        this.businessCards = response.responseData.items;
+        this.totalItems = response.responseData.totalCount;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.isLoading = false;
+        console.error('Something went wrong', err);
+      }
+    });
+  }
+
+  deleteBusinessCards(businessCardId:number) {
+
+    this.isLoading = true;
+    this.businessCardManagement.DeleteBusinessCard(businessCardId).subscribe({
       next: (response: any) => {
         this.businessCards = response.responseData.items;
         this.totalItems = response.responseData.totalCount;
@@ -147,6 +164,17 @@ export class BusinessCardManagementComponent implements OnInit {
 
   onPageChange(pagedRequest: PagedRequest) {
     this.pagedRequest = pagedRequest;
+    this.getBusinessCards();
+  }
+
+  resetFilters() {
+    this.businessCardRequest = {
+      Name: null,
+      Gender: null,
+      DateOfBirth: null,
+      Email: null,
+      Phone: null
+    };
     this.getBusinessCards();
   }
 }

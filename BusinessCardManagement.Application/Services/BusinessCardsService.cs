@@ -24,7 +24,7 @@ public class BusinessCardsService : IBusinessCardsService
              .Where(b =>
                  (request.Name == null || b.Name.Contains(request.Name)) &&
                  (request.DateOfBirth == null || b.DateOfBirth.Date == request.DateOfBirth.Value.Date) &&
-                 (request.Gender == null || b.Gender.Contains(request.Gender)) &&
+                 (request.Gender == null || b.Gender.ToLower() == request.Gender.ToLower()) &&
                  (request.Email == null || b.Email.Contains(request.Email)) &&
                  (request.Phone == null || b.Phone.Contains(request.Phone))
              );
