@@ -72,8 +72,18 @@ public class BusinessCardsController : ControllerBase
 
 
     [HttpPost()]
-    public async Task<IActionResult> Create([FromQuery] CreateBusinessCardRequest requestCard)
+    public async Task<IActionResult> Create(CreateBusinessCardRequest requestCard)
     {
+
+        if (!string.IsNullOrEmpty(requestCard.Photo))
+        {
+            var allowedTypes = new List<string> { "data:image/jpeg", "data:image/jpg", "data:image/png", "data:image/gif" };
+            bool isValidType = allowedTypes.Any(t => requestCard.Photo.StartsWith(t, StringComparison.OrdinalIgnoreCase));
+
+            if (!isValidType)
+                return BadRequest(ErrorMessages.NotAllowedImageType);
+        }
+
         List<BusinessCard> businessCards = new List<BusinessCard>();
 
         businessCards.Add(new BusinessCard

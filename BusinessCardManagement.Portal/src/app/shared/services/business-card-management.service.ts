@@ -17,12 +17,12 @@ export class BusinessCardManagementService {
   addNewBusinessCard(businessCardForm: BusinessCardForm) {
 
     let requestBody: any = {
-      name: businessCardForm.Name,
-      gender: businessCardForm.Gender,
-      email: businessCardForm.Email,
-      phone: businessCardForm.Phone,
-      dateOfBirth: businessCardForm.DateOfBirth,
-      address: businessCardForm.Address,
+      Name: businessCardForm.Name,
+      Gender: businessCardForm.Gender,
+      Email: businessCardForm.Email,
+      Phone: businessCardForm.Phone,
+      DateOfBirth: businessCardForm.DateOfBirth,
+      Address: businessCardForm.Address,
     };
 
     if (businessCardForm.Photo) {

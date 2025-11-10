@@ -3,8 +3,8 @@ import { PaginationComponent } from '../../shared/components/pagination/paginati
 import { PagedRequest, ToastType } from '../../shared/types/common';
 import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { BusinessCardManagementService } from '../../shared/services/business-card-management.service';
-import { BusinessCard, FileType, GetAllBusinessCardRequest } from '../../shared/types/business-card-management';
-import { CommonModule } from '@angular/common';
+import { BusinessCard, BusinessCardForm, FileType, GetAllBusinessCardRequest } from '../../shared/types/business-card-management';
+import { CommonModule, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from '../../shared/services/toast.service';
 import { PopupComponent } from '../../shared/components/popup/popup.component';
@@ -12,7 +12,7 @@ import { PopupComponent } from '../../shared/components/popup/popup.component';
 @Component({
   selector: 'app-business-card-management',
   standalone: true,
-  imports: [PaginationComponent, LoadingComponent, CommonModule,FormsModule,PopupComponent],
+  imports: [PaginationComponent, LoadingComponent, CommonModule, FormsModule, PopupComponent,NgClass],
   templateUrl: './business-card-management.component.html'
 })
 export class BusinessCardManagementComponent implements OnInit {
@@ -49,11 +49,28 @@ export class BusinessCardManagementComponent implements OnInit {
     PageSize: 10
   };
 
-  businessCardIdToDelete:number = 0;
+  businessCardIdToDelete: number = 0;
 
   totalItems: number = 0;
   deleteConfermationPopupVisible: boolean = false;
+  addNewPopupVisible: boolean = false;
 
+  createBusinessCardForm: BusinessCardForm = {
+    Name: "",
+    Gender: "",
+    DateOfBirth: "",
+    Email: "",
+    Phone: "",
+    Photo: null,
+    Address: ""
+  };
+  businessCardFormNameValidation: boolean = false;
+  businessCardFormGenderValidation: boolean = false;
+  businessCardFormDateOfBirthValidation: boolean = false;
+  businessCardFormEmailValidation: boolean = false;
+  businessCardFormPhoneValidation: boolean = false;
+  businessCardFormAddressValidation: boolean = false;
+  createBusinessCardPopupValidationMassage: string = '';
   constructor(private businessCardManagement: BusinessCardManagementService, private toastService: ToastService) { }
 
   ngOnInit(): void {
@@ -80,8 +97,7 @@ export class BusinessCardManagementComponent implements OnInit {
   deleteBusinessCard() {
     this.isLoading = true;
     this.businessCardManagement.DeleteBusinessCard(this.businessCardIdToDelete).subscribe({
-      next: (response: any) =>
-      {
+      next: (response: any) => {
         this.toastService.show("Business card deleted successfully", ToastType.Success)
         this.closeDeleteConfermationPopup();
         this.isLoading = false;
@@ -104,6 +120,110 @@ export class BusinessCardManagementComponent implements OnInit {
   closeDeleteConfermationPopup() {
     this.businessCardIdToDelete = 0;
     this.deleteConfermationPopupVisible = false;
+  }
+
+  showCreateBusinessCardPopup() {
+    this.addNewPopupVisible = true;
+  }
+
+  createBusinessCard() {
+
+    this.businessCardFormNameValidation = false;
+    this.businessCardFormGenderValidation = false;
+    this.businessCardFormDateOfBirthValidation = false;
+    this.businessCardFormEmailValidation = false;
+    this.businessCardFormPhoneValidation = false;
+    this.businessCardFormAddressValidation = false;
+    this.createBusinessCardPopupValidationMassage= '';
+
+    var isValid: boolean = true;
+
+    if (!this.createBusinessCardForm.Name.trim()) {
+      isValid = false;
+      this.businessCardFormNameValidation = true;
+    }
+
+    if (!this.createBusinessCardForm.Gender.trim()) {
+      isValid = false;
+      this.businessCardFormGenderValidation = true;
+    }
+
+    if (!this.createBusinessCardForm.DateOfBirth.trim()) {
+      isValid = false;
+      this.businessCardFormDateOfBirthValidation = true;
+    }
+
+    if (!this.createBusinessCardForm.Phone.trim()) {
+      isValid = false;
+      this.businessCardFormPhoneValidation = true;
+    }
+
+    if (!this.createBusinessCardForm.Email.trim()) {
+      isValid = false;
+      this.businessCardFormEmailValidation = true;
+    }
+
+    if (!this.createBusinessCardForm.Address.trim()) {
+      isValid = false;
+      this.businessCardFormAddressValidation = true;
+    }
+
+    if (!isValid) {
+      this.createBusinessCardPopupValidationMassage = "Field/s is required";
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(this.createBusinessCardForm.Email)) {
+      this.businessCardFormEmailValidation = true;
+      this.createBusinessCardPopupValidationMassage = "Invalid email address";
+      return;
+    }
+
+    const phoneRegex = /^\+?\d{7,15}$/;
+    if (!phoneRegex.test(this.createBusinessCardForm.Phone)) {
+      this.businessCardFormPhoneValidation = true;
+      this.createBusinessCardPopupValidationMassage = "Invalid phone number";
+      return;
+    }
+
+
+    this.isLoading = true;
+    this.businessCardManagement.addNewBusinessCard(this.createBusinessCardForm).subscribe({
+      next: (response: any) => {
+        this.toastService.show("Business card created successfully", ToastType.Success)
+        this.closeCreateBusinessCardPopup();
+        this.isLoading = false;
+        this.resetFilters();
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.toastService.show(err.error, ToastType.Eroor)
+        this.closeCreateBusinessCardPopup();
+      }
+    });
+  }
+
+  closeCreateBusinessCardPopup() {
+    this.createBusinessCardForm = {
+      Name: "",
+      Gender: "",
+      DateOfBirth: "",
+      Email: "",
+      Phone: "",
+      Photo: null,
+      Address: ""
+    };
+
+    this.businessCardFormNameValidation = false;
+    this.businessCardFormGenderValidation = false;
+    this.businessCardFormDateOfBirthValidation = false;
+    this.businessCardFormEmailValidation = false;
+    this.businessCardFormPhoneValidation = false;
+    this.businessCardFormAddressValidation = false;
+    this.createBusinessCardPopupValidationMassage = '';
+
+    this.addNewPopupVisible = false;
   }
 
 
@@ -132,7 +252,7 @@ export class BusinessCardManagementComponent implements OnInit {
   }
 
   exportAllCSV() {
-    this.exportFileType= FileType.Csv;
+    this.exportFileType = FileType.Csv;
 
     this.exportPagedRequest = {
       PageNumber: 1,
@@ -213,5 +333,32 @@ export class BusinessCardManagementComponent implements OnInit {
     }
     this.pager.reset();
     this.getBusinessCards();
+  }
+
+
+
+  onPhotoSelected(event: any) {
+    this.createBusinessCardPopupValidationMassage = "";
+    const input = event.target; 
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      this.createBusinessCardPopupValidationMassage = "Only JPG, JPEG, PNG, and GIF images are allowed.";
+      this.createBusinessCardForm.Photo = null;
+      input.value = "";
+      return;
+    }
+    input.value = "";
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.createBusinessCardForm.Photo = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  deletePhoto() {
+    this.createBusinessCardForm.Photo = null;
   }
 }

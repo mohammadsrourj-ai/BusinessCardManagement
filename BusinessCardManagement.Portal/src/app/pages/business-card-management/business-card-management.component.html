@@ -73,12 +73,18 @@
       </button>
     </div>
   </div>
+  <div class="w-100 d-flex justify-content-end">
+    <button (click)="showCreateBusinessCardPopup()" class="btn btn-outline-primary rounded-pill">
+      <i class="fa-solid fa-plus"></i> Add
+    </button>
+  </div>
 
   <div class="row">
     @for(card of businessCards; track card.id){
     <div class="col-12 col-lg-3 col-md-4 my-2">
       <div class="card shadow-sm border-0 rounded-4 text-center position-relative overflow-hidden"
            style="max-width: 320px; margin: auto; cursor: pointer;">
+        <span class="position-absolute bg-soft-lemon rounded rounded-3 p-1 m-3 small fw-bolder">#{{card.id}}</span>
 
         <div class="card-content position-relative z-1 p-4">
           <div class="d-flex justify-content-center mb-3 mt-2">
@@ -86,8 +92,7 @@
             <img [src]="card.photo" class="rounded-circle" width="80" height="80" alt="photo">
             }
             @else{
-            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
-                 style="width: 80px; height: 80px; font-size: 36px;">
+            <div class="badg-primary">
               {{card.name[0]}}
             </div>
             }
@@ -134,16 +139,111 @@
 
 <app-popup [popupVisible]="deleteConfermationPopupVisible" [showTitle]="true" [title]="'Confirm Delete Business Card.'"
            [popupHeight]="'auto'" [popupWidth]="'auto'">
-  <p class="fw-bold small"> Are you sure to delete business card number {{businessCardIdToDelete}} ?</p>
+  <p class="fw-bold small">
+    Are you sure you want to delete business card #{{businessCardIdToDelete}}?
+  </p>
   <div class="d-flex justify-content-end">
     <button (click)="closeDeleteConfermationPopup()" class="btn btn-sm btn-outline-rose px-4 py-2 me-2">
       Cancle
     </button>
     <button (click)="deleteBusinessCard()" class="btn btn-sm btn-outline-primary px-4 py-2">
-       Confirm
+      Confirm
     </button>
   </div>
 </app-popup>
+
+<app-popup [popupVisible]="addNewPopupVisible" [showTitle]="true" [title]="'New Business Card.'"
+           [popupHeight]="'auto'" [popupWidth]="'auto'">
+
+  <div class="border-0 rounded-4 text-center position-relative overflow-hidden"
+       style="max-width: 320px; margin: auto; cursor: pointer;">
+    <div class="card-content position-relative z-1">
+
+      <div class="d-flex justify-content-center mb-3 mt-2">
+        @if(createBusinessCardForm.Photo){
+        <img [src]="createBusinessCardForm.Photo" alt="Profile Photo"
+             class="rounded-circle border" style="width: 80px; height: 80px; object-fit: cover;">
+
+        <button (click)="deletePhoto()" class="bg-transparent border-0 m-1">
+          <i class="fa-solid fa-trash text-danger"></i>
+        </button>
+        }
+        @else{
+        <div class="badge bg-primary text-white d-flex align-items-center justify-content-center"
+             style="width: 80px; height: 80px; font-size: 32px;">
+          @if(createBusinessCardForm.Name){
+          {{createBusinessCardForm.Name[0]}}
+          }
+          @else{
+          -
+          }
+        </div>
+        }
+      </div>
+
+      <input type="file" accept="image/*" (change)="onPhotoSelected($event)" class="form-control mb-3" />
+
+      <h5 class="fw-semibold mb-3">
+        <input type="text" class="form-control"
+               [ngClass]="{ 'border border-1 border-danger': businessCardFormNameValidation}"
+               [(ngModel)]="createBusinessCardForm.Name" placeholder="Enter name" />
+      </h5>
+
+      <ul class="list-unstyled text-start small text-secondary mb-3">
+        <li class="mb-2 d-flex align-items-center">
+          <i class="fa-solid fa-mars text-primary me-2"></i>
+          <select class="form-select"
+                  [ngClass]="{ 'border border-1 border-danger': businessCardFormGenderValidation}"
+                  [(ngModel)]="createBusinessCardForm.Gender">
+            <option [ngValue]="''">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+        </li>
+        <li class="mb-2 d-flex align-items-center">
+          <i class="fa-solid fa-cake-candles text-primary me-2"></i>
+          <input type="date" class="form-control"
+                 [ngClass]="{ 'border border-1 border-danger': businessCardFormDateOfBirthValidation}"
+                 [(ngModel)]="createBusinessCardForm.DateOfBirth" />
+        </li>
+        <li class="mb-2 d-flex align-items-center">
+          <i class="fa-solid fa-envelope text-primary me-2"></i>
+          <input type="email" class="form-control"
+                 [ngClass]="{ 'border border-1 border-danger': businessCardFormEmailValidation}"
+                 [(ngModel)]="createBusinessCardForm.Email" placeholder="Enter email" />
+        </li>
+        <li class="mb-2 d-flex align-items-center">
+          <i class="fa-solid fa-phone text-primary me-2"></i>
+          <input type="text" class="form-control"
+                 [ngClass]="{ 'border border-1 border-danger': businessCardFormPhoneValidation}"
+                 [(ngModel)]="createBusinessCardForm.Phone" placeholder="Enter phone number" />
+        </li>
+        <li class="d-flex align-items-center">
+          <i class="fa-solid fa-location-dot text-primary me-2"></i>
+          <input type="text" class="form-control"
+                 [ngClass]="{ 'border border-1 border-danger': businessCardFormAddressValidation}"
+                 [(ngModel)]="createBusinessCardForm.Address" placeholder="Enter address" />
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end">
+    <button (click)="closeCreateBusinessCardPopup()" class="btn btn-sm btn-outline-rose px-4 py-2 me-2">
+      Cancel
+    </button>
+    <button (click)="createBusinessCard()" class="btn btn-sm btn-outline-primary px-4 py-2 me-2">
+      Create
+    </button>
+  </div>
+  @if(createBusinessCardPopupValidationMassage){
+  <div class="small rounded rounded-3 bg-danger text-white fw-bold mt-1 px-2 p-1">
+    {{createBusinessCardPopupValidationMassage}}
+  </div>
+  }
+
+</app-popup>
+
 
 
 <app-loading [isLoading]="isLoading"></app-loading>

@@ -8,4 +8,5 @@ public static class ErrorMessages
     public const string ThisEmailIsUsedBefore = "This email/s is used before";
     public const string ThisPhoneIsUsedBefore = "This phone/s is used before";
     public const string UnsupportedFileType = "Unsupported file type";
+    public const string NotAllowedImageType = "Only JPG, JPEG, PNG, and GIF images are allowed";
 }

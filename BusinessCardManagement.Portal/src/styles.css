@@ -2,6 +2,7 @@
   --primary: #674A75;
   --bs-primary-rgb: 103, 74, 117;
   --rose: #D55D78;
+  --soft-lemon: #FAEA9E;
 }
 
 .btn-primary {
@@ -53,6 +54,10 @@
   --bs-btn-disabled-bg: transparent;
   --bs-btn-disabled-border-color: var(--rose);
   --bs-gradient: none;
+}
+
+.bg-soft-lemon {
+  background-color: var(--soft-lemon) !important;
 }
 
 .wave {
